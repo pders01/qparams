@@ -1,0 +1,52 @@
+{
+  "name": "@jpahd/qparams",
+  "version": "0.1.0",
+  "description": "Schema-driven URL query parameter builder with support for forbidden, repeatable, optional, and static params.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "oxlint src test",
+    "fmt": "oxfmt --write src test examples",
+    "fmt:check": "oxfmt --check src test examples",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.40.0",
+    "oxlint": "^1.55.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "keywords": [
+    "url",
+    "query",
+    "params",
+    "search-params",
+    "schema",
+    "urlsearchparams"
+  ],
+  "author": "Paul Derscheid",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pders01/qparams.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pders01/qparams/issues"
+  },
+  "homepage": "https://github.com/pders01/qparams#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

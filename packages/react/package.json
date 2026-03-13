@@ -1,0 +1,32 @@
+{
+  "name": "@jpahd/qparams-react",
+  "version": "0.1.0",
+  "description": "React bindings for @jpahd/qparams",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "@jpahd/qparams": "workspace:*",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@jpahd/qparams": "workspace:*",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.7.0"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
