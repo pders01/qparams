@@ -7,7 +7,7 @@ Zero runtime dependencies. Pure functions. Returns standard `URLSearchParams`.
 ## Install
 
 ```bash
-pnpm add @jpahd/qparams
+npm install @jpahd/qparams
 ```
 
 ## Quick start
@@ -192,11 +192,11 @@ Companion packages that sync qparams with framework-specific reactivity. All sha
 
 | Package | Install | API |
 |---|---|---|
-| React | `pnpm add @jpahd/qparams-react` | `useQParams(schema)` |
-| Vue | `pnpm add @jpahd/qparams-vue` | `useQParams(schema)` |
-| Lit | `pnpm add @jpahd/qparams-lit` | `new QParamsController(host, schema)` |
-| Svelte | `pnpm add @jpahd/qparams-svelte` | `createQParams(schema)` |
-| Solid | `pnpm add @jpahd/qparams-solid` | `createQParams(schema)` |
+| React | `npm install @jpahd/qparams-react` | `useQParams(schema)` |
+| Vue | `npm install @jpahd/qparams-vue` | `useQParams(schema)` |
+| Lit | `npm install @jpahd/qparams-lit` | `new QParamsController(host, schema)` |
+| Svelte | `npm install @jpahd/qparams-svelte` | `createQParams(schema)` |
+| Solid | `npm install @jpahd/qparams-solid` | `createQParams(schema)` |
 
 ```ts
 // React example
@@ -238,13 +238,13 @@ function SearchPage() {
 ## Development
 
 ```bash
-pnpm install
-pnpm test          # run tests once
-pnpm test:watch    # run tests in watch mode
-pnpm lint          # oxlint
-pnpm fmt           # oxfmt (write)
-pnpm fmt:check     # oxfmt (check, for CI)
-pnpm build         # compile to dist/
+npm install
+npm test           # run tests once
+npm run test:watch # run tests in watch mode
+npm run lint       # oxlint
+npm run fmt        # oxfmt (write)
+npm run fmt:check  # oxfmt (check, for CI)
+npm run build      # compile to dist/
 ```
 
 ## License
