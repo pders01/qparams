@@ -45,6 +45,7 @@
     "url": "https://github.com/pders01/qparams/issues"
   },
   "homepage": "https://github.com/pders01/qparams#readme",
+  "packageManager": "pnpm@10.16.1",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
