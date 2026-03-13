@@ -123,7 +123,10 @@ export function App() {
       {/* Current URL */}
       <section style={styles.card}>
         <label style={styles.label}>Current URL</label>
-        <code style={styles.urlBar}>{window.location.pathname}{window.location.search || "?"}</code>
+        <code style={styles.urlBar}>
+          {window.location.pathname}
+          {window.location.search || "?"}
+        </code>
       </section>
 
       <div style={styles.grid}>
@@ -171,7 +174,11 @@ export function App() {
             <label style={styles.label}>
               Sort <span style={styles.badge}>regular</span>
             </label>
-            <select value={sortValue} onChange={(e) => onSortChange(e.target.value)} style={styles.select}>
+            <select
+              value={sortValue}
+              onChange={(e) => onSortChange(e.target.value)}
+              style={styles.select}
+            >
               {SORTS.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}

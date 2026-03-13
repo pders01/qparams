@@ -7,13 +7,13 @@ Zero runtime dependencies. Pure functions. Returns standard `URLSearchParams`.
 ## Install
 
 ```bash
-pnpm add qparams
+pnpm add @jpahd/qparams
 ```
 
 ## Quick start
 
 ```ts
-import { createSchema, constrain, merge } from "qparams";
+import { createSchema, constrain, merge } from "@jpahd/qparams";
 
 const schema = createSchema({
   forbidden: ["token"],       // silently stripped
@@ -46,10 +46,12 @@ interface SchemaOptions {
   repeatable?: string[];  // Appended, not overwritten; diffed on merge
   optional?: string[];    // Dropped from current state on merge unless re-supplied
   static?: string[];      // Set once, subsequent writes are ignored
+  hooks?: Hooks;          // Optional callbacks fired after operations
+  validate?: (schema: Schema) => void;  // BYO validation callback
 }
 ```
 
-Returns a `Schema` (an object of `ReadonlySet<string>`s).
+Returns a `Schema` (an object of `ReadonlySet<string>`s + `hooks`).
 
 ### `constrain(schema, incoming, base?): URLSearchParams`
 
@@ -108,6 +110,17 @@ clean.toString(); // "q=hello"
 
 Options: `{ static?: boolean; forbidden?: boolean }`.
 
+### `fromURL(url): URLSearchParams`
+
+Extract search params from a full URL string or `URL` object.
+
+```ts
+import { fromURL } from "@jpahd/qparams";
+
+const params = fromURL("https://example.com/search?q=hello&tag=js");
+params.get("q"); // "hello"
+```
+
 ### `get(params, key): string | null`
 
 Convenience wrapper around `URLSearchParams.get()`.
@@ -123,6 +136,85 @@ Convert `URLSearchParams` to a plain object. Keys that appear multiple times bec
 ```ts
 const params = new URLSearchParams("tag=a&tag=b&name=test");
 toObject(params); // { tag: ["a", "b"], name: "test" }
+```
+
+## Hooks
+
+Opt-in callbacks fired after operations. Useful for logging, analytics, or debugging.
+
+```ts
+import { createSchema } from "@jpahd/qparams";
+
+const schema = createSchema({
+  repeatable: ["tag"],
+  hooks: {
+    onConstrain(incoming, result) {
+      console.log("constrain:", result.toString());
+    },
+    onMerge(current, incoming, result) {
+      console.log("merge:", result.toString());
+    },
+    onWithout(input, result) {
+      console.log("without:", result.toString());
+    },
+  },
+});
+```
+
+## Schema validation
+
+`createSchema` accepts a `validate` callback for BYO validation. It receives the built schema and can throw if something is wrong.
+
+```ts
+import { createSchema } from "@jpahd/qparams";
+
+createSchema({
+  forbidden: ["tag"],
+  repeatable: ["tag"], // oops — same key in two categories
+  validate(schema) {
+    const seen = new Set<string>();
+    for (const category of [schema.forbidden, schema.repeatable, schema.optional, schema.static]) {
+      for (const key of category) {
+        if (seen.has(key)) throw new Error(`Key "${key}" in multiple categories`);
+        seen.add(key);
+      }
+    }
+  },
+});
+// throws: Key "tag" in multiple categories
+```
+
+See `examples/zod-validator.ts` for a zod-based validator.
+
+## Framework bindings
+
+Companion packages that sync qparams with framework-specific reactivity. All share the same return shape: `params`, `update`, `strip`, `toObject`.
+
+| Package | Install | API |
+|---|---|---|
+| React | `pnpm add @jpahd/qparams-react` | `useQParams(schema)` |
+| Vue | `pnpm add @jpahd/qparams-vue` | `useQParams(schema)` |
+| Lit | `pnpm add @jpahd/qparams-lit` | `new QParamsController(host, schema)` |
+| Svelte | `pnpm add @jpahd/qparams-svelte` | `createQParams(schema)` |
+| Solid | `pnpm add @jpahd/qparams-solid` | `createQParams(schema)` |
+
+```ts
+// React example
+import { createSchema } from "@jpahd/qparams";
+import { useQParams } from "@jpahd/qparams-react";
+
+const schema = createSchema({ repeatable: ["tag"], optional: ["q"] });
+
+function SearchPage() {
+  const { params, update, strip, toObject } = useQParams(schema);
+
+  return (
+    <input
+      value={params.get("q") ?? ""}
+      onChange={(e) => update({ q: e.target.value })}
+    />
+  );
+}
 ```
 
 ## Param categories explained
@@ -149,6 +241,9 @@ toObject(params); // { tag: ["a", "b"], name: "test" }
 pnpm install
 pnpm test          # run tests once
 pnpm test:watch    # run tests in watch mode
+pnpm lint          # oxlint
+pnpm fmt           # oxfmt (write)
+pnpm fmt:check     # oxfmt (check, for CI)
 pnpm build         # compile to dist/
 ```
 
